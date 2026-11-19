@@ -78,6 +78,7 @@
       cards: [],      // 本轮两张牌（一张真心话、一张大冒险）
       swapped: false,
       chosen: null,   // 被选中的牌在 cards 里的位置
+      timerLeft: null, // 本轮倒计时剩余秒数，null = 未开始
       event: "",      // 显示在交接页的升档提示
       history: [],
       phase: "handoff"
@@ -124,8 +125,9 @@
   }
 
   function goAsk() {
-    G.phase = "ask"; save(); renderTop();
+    G.phase = "ask";
     if (!G.cards.length) dealCards();
+    save(); renderTop();
     var target = G.players[targetIdx()];
     $("ask-title").textContent = "给 " + target.name + " 出题（" + TIER_NAMES[target.tier] + "）";
     $("ask-cards").innerHTML = G.cards.map(function (q, i) {
@@ -161,20 +163,26 @@
     var q = G.cards[G.chosen];
     $("reveal-card").outerHTML = '<div id="reveal-card">' + cardHtml(q, true) + "</div>";
     stopTimer();
+    // G.timerLeft：null/undefined = 还没开始计时（旧存档也是这样）；数字 = 已开始，刷新后暂停在这个秒数
+    var left = G.timerLeft == null ? null : G.timerLeft;
     $("timer-box").classList.toggle("hidden", !q.seconds);
-    $("timer-num").textContent = q.seconds ? q.seconds + " 秒" : "";
-    $("btn-timer").disabled = false;
+    $("timer-num").textContent = !q.seconds ? "" : left === null ? q.seconds + " 秒" : left > 0 ? left + " 秒" : "时间到";
+    $("btn-timer").textContent = left === null ? "开始计时" : "继续计时";
+    $("btn-timer").disabled = left !== null && left <= 0;
     $("btn-done").textContent = q.type === "dare" ? "做到了" : "答了";
     show("screen-reveal");
   }
 
   function startTimer() {
     var q = G.cards[G.chosen];
-    var left = q.seconds;
+    var left = G.timerLeft == null ? q.seconds : G.timerLeft;
+    if (left <= 0) return;
     $("btn-timer").disabled = true;
     stopTimer();
+    G.timerLeft = left; save();   // 每秒保存一次剩余秒数，刷新后从这里暂停（最多少算不到 1 秒）
     timerHandle = setInterval(function () {
       left--;
+      G.timerLeft = Math.max(left, 0); save();
       $("timer-num").textContent = left > 0 ? left + " 秒" : "时间到";
       if (left <= 0) stopTimer();
     }, 1000);
@@ -183,6 +191,7 @@
 
   function finishRound(escaped) {
     stopTimer();
+    G.timerLeft = null;
     var q = G.cards[G.chosen];
     var ti = targetIdx();
     var target = G.players[ti];
