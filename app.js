@@ -5,7 +5,8 @@
 
   var TIER_NAMES = { 1: "温和", 2: "暧昧", 3: "私密", 4: "缠绵" };
   var TYPE_NAMES = { truth: "真心话", dare: "大冒险" };
-  var LEVEL_UP_EVERY = 5;          // 每满 5 轮全员升一档
+  var ANSWERS_TO_LEVEL = 10;       // 在当前档位答满 10 题，这个人升一档
+  var ESCAPES_TO_LEVEL = 6;        // 在当前档位逃超过 5 次（第 6 次），这个人马上升一档
   var SAVE_KEY = "tanbai-duo-game";
 
   // ---------- 题库：读取并检查 ----------
@@ -198,17 +199,24 @@
     G.used.push(q.id);
     G.history.push({ round: G.round, asker: askerIdx(), target: ti, q: q, escaped: escaped, tierAtTime: target.tier });
     var events = [];
+    // tierDone / tierEscaped：在当前档位答了几题、逃了几次（旧存档没有这两项，按 0 算）
+    target.tierDone = target.tierDone || 0;
+    target.tierEscaped = target.tierEscaped || 0;
+    var reason = "";
     if (escaped) {
       target.escaped++;
-      if (target.tier < 4) { target.tier++; events.push(target.name + " 逃了，升到「" + TIER_NAMES[target.tier] + "」"); }
-      else events.push(target.name + " 逃了（已经是最高档）");
+      target.tierEscaped++;
+      if (target.tierEscaped >= ESCAPES_TO_LEVEL) reason = "在这档逃了 " + target.tierEscaped + " 次";
     } else {
       target.done++;
+      target.tierDone++;
+      if (target.tierDone >= ANSWERS_TO_LEVEL) reason = "在这档答满 " + target.tierDone + " 题";
     }
-    if (G.round % LEVEL_UP_EVERY === 0 && G.round < G.total) {
-      var up = false;
-      G.players.forEach(function (p) { if (p.tier < 4) { p.tier++; up = true; } });
-      if (up) events.push("满 " + LEVEL_UP_EVERY + " 轮，全员升一档");
+    if (reason && target.tier < 4) {
+      target.tier++;
+      target.tierDone = 0;
+      target.tierEscaped = 0;
+      events.push(target.name + " " + reason + "，升到「" + TIER_NAMES[target.tier] + "」");
     }
     G.event = events.join("；");
     G.cards = [];
@@ -271,7 +279,7 @@
     var b = $("name-b").value.trim() || "玩家2";
     var tier = parseInt($("start-tier").value, 10) || 1;
     var total = parseInt($("total-rounds").value, 10);
-    if (!(total >= 2 && total <= 50)) total = 10;
+    if (!(total >= 2 && total <= 50)) total = 40;
     newGame(a, b, tier, total);
     goHandoff();
   });

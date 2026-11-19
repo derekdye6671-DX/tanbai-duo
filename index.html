@@ -21,7 +21,7 @@
     <label class="field">玩家 1 昵称<input id="name-a" maxlength="8" placeholder="玩家1"></label>
     <label class="field">玩家 2 昵称<input id="name-b" maxlength="8" placeholder="玩家2"></label>
     <label class="field">起始档位<select id="start-tier"></select></label>
-    <label class="field">总轮数<input id="total-rounds" type="number" min="2" max="50" value="10"></label>
+    <label class="field">总轮数<input id="total-rounds" type="number" min="2" max="50" value="40"></label>
     <p class="event">开始前先约定一个安全词：任何一方说出安全词，马上停下。</p>
     <p id="bank-info" class="hint"></p>
     <button id="btn-start" class="btn primary">开始</button>
@@ -60,7 +60,7 @@
     </div>
     <button id="btn-done" class="btn primary"></button>
     <button id="btn-escape" class="btn danger">逃了</button>
-    <p class="hint">逃了不丢人 —— 只是你之后的题会升一档。</p>
+    <p class="hint">逃了不丢人 —— 同一档逃满 6 次会直接升一档。</p>
   </section>
 
   <!-- 6. 战报卡 -->
