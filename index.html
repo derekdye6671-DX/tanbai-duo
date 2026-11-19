@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>坦白局 · 双人版</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- 顶栏：轮次 + 两人当前档位（游戏中显示） -->
+  <header id="topbar" class="hidden">
+    <div id="round-info"></div>
+    <div id="tier-info"></div>
+  </header>
+
+  <!-- 1. 开局设置 -->
+  <section id="screen-setup" class="screen">
+    <h1 class="title">坦白局 · 双人版</h1>
+    <label class="field">玩家 1 昵称<input id="name-a" maxlength="8" placeholder="玩家1"></label>
+    <label class="field">玩家 2 昵称<input id="name-b" maxlength="8" placeholder="玩家2"></label>
+    <label class="field">起始档位<select id="start-tier"></select></label>
+    <label class="field">总轮数<input id="total-rounds" type="number" min="2" max="50" value="10"></label>
+    <p class="event">开始前先约定一个安全词：任何一方说出安全词，马上停下。</p>
+    <p id="bank-info" class="hint"></p>
+    <button id="btn-start" class="btn primary">开始</button>
+    <button id="btn-resume" class="btn hidden">继续上一局</button>
+  </section>
+
+  <!-- 2. 交接：把手机交给出题人 -->
+  <section id="screen-handoff" class="screen hidden">
+    <p id="handoff-event" class="event hidden"></p>
+    <p id="handoff-text" class="big"></p>
+    <p id="handoff-sub" class="hint"></p>
+    <button id="btn-handoff" class="btn primary"></button>
+  </section>
+
+  <!-- 3. 出题人看两张牌，可换一次 -->
+  <section id="screen-ask" class="screen hidden">
+    <p id="ask-title" class="big"></p>
+    <p class="hint">只有你能看到题目。每轮只能换一次牌。</p>
+    <div id="ask-cards" class="cards"></div>
+    <button id="btn-to-pick" class="btn primary"></button>
+  </section>
+
+  <!-- 4. 被问的人盲选 -->
+  <section id="screen-pick" class="screen hidden">
+    <p id="pick-title" class="big"></p>
+    <p class="hint">你看不到题目，只知道类别。</p>
+    <div id="pick-cards" class="cards"></div>
+  </section>
+
+  <!-- 5. 揭晓：做到了 / 逃了 -->
+  <section id="screen-reveal" class="screen hidden">
+    <div id="reveal-card" class="card open"></div>
+    <div id="timer-box" class="hidden">
+      <p id="timer-num" class="timer"></p>
+      <button id="btn-timer" class="btn">开始计时</button>
+    </div>
+    <button id="btn-done" class="btn primary"></button>
+    <button id="btn-escape" class="btn danger">逃了</button>
+    <p class="hint">逃了不丢人 —— 只是你之后的题会升一档。</p>
+  </section>
+
+  <!-- 6. 战报卡 -->
+  <section id="screen-report" class="screen hidden">
+    <div id="report-card" class="report"></div>
+    <button id="btn-again" class="btn primary">再来一局</button>
+  </section>
+
+</div>
+<script src="questions.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

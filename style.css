@@ -1,0 +1,74 @@
+/* 坦白局 · 双人版 —— 样式
+   ChatGPT 优化界面时只改这个文件（可以改颜色、字体、间距、动画），
+   不要改 index.html 里的 id，也不要动 app.js。 */
+
+:root {
+  --bg: #16121c;
+  --panel: #241e2e;
+  --text: #f2eef7;
+  --muted: #9a90a8;
+  --accent: #e0559a;
+  --danger: #c0405a;
+  --tier1: #4caf6a;
+  --tier2: #e6c34a;
+  --tier3: #e86a8f;
+  --tier4: #d0365e;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+#app { max-width: 480px; margin: 0 auto; padding: 16px 16px 40px; }
+.hidden { display: none !important; }
+
+#topbar { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 16px; font-size: 14px; color: var(--muted); }
+.badge { display: inline-block; padding: 2px 8px; margin-left: 4px; border-radius: 999px; font-size: 12px; color: #111; }
+.badge.tier1, .card.tier1 .card-tier { background: var(--tier1); }
+.badge.tier2, .card.tier2 .card-tier { background: var(--tier2); }
+.badge.tier3, .card.tier3 .card-tier { background: var(--tier3); }
+.badge.tier4, .card.tier4 .card-tier { background: var(--tier4); }
+
+.title { text-align: center; font-size: 28px; margin: 24px 0; }
+.big { font-size: 22px; font-weight: bold; text-align: center; margin: 24px 0 8px; }
+.hint { color: var(--muted); font-size: 13px; text-align: center; }
+.event { background: var(--panel); border: 1px solid var(--accent); border-radius: 12px; padding: 12px; text-align: center; color: var(--accent); }
+
+.field { display: block; margin-bottom: 14px; font-size: 14px; color: var(--muted); }
+.field input, .field select {
+  display: block; width: 100%; margin-top: 6px; padding: 12px;
+  font-size: 16px; border-radius: 10px; border: 1px solid #3a3246;
+  background: var(--panel); color: var(--text);
+}
+
+.btn {
+  display: block; width: 100%; margin-top: 12px; padding: 14px;
+  font-size: 16px; border-radius: 999px; border: 1px solid #4a405a;
+  background: var(--panel); color: var(--text); cursor: pointer;
+}
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.danger { border-color: var(--danger); color: var(--danger); background: transparent; }
+.btn.small { width: auto; display: inline-block; padding: 6px 14px; font-size: 13px; margin-top: 10px; }
+.btn:disabled { opacity: .4; }
+
+.cards { display: grid; gap: 12px; margin: 16px 0; }
+.card { background: var(--panel); border-radius: 14px; padding: 14px; text-align: left; }
+.card-head { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); }
+.card-tier { padding: 1px 8px; border-radius: 999px; color: #111; }
+.card-text { font-size: 18px; margin-top: 10px; line-height: 1.5; }
+.card-text.blind { font-size: 36px; text-align: center; color: var(--muted); }
+
+.pick { all: unset; display: block; cursor: pointer; }
+
+#reveal-card .card { margin: 16px 0; }
+.timer { font-size: 40px; text-align: center; margin: 8px 0; }
+
+.report { background: var(--panel); border-radius: 16px; padding: 16px; }
+.report-title { text-align: center; margin: 0 0 4px; }
+.report-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+.report-table th, .report-table td { padding: 6px 4px; border-bottom: 1px solid #3a3246; text-align: left; }
+.report-sub { font-size: 15px; margin: 16px 0 8px; color: var(--accent); }
+.report-bold .card { background: #2e2640; }
