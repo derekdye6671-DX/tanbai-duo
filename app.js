@@ -118,7 +118,7 @@
 
   function cardHtml(q, open, extraBtn) {
     return '<div class="card tier' + q.tier + (open ? " open" : "") + '">' +
-      '<div class="card-head"><span>' + TYPE_NAMES[q.type] + " · " + esc(q.category) + "</span>" +
+      '<div class="card-head"><span>' + TYPE_NAMES[q.type] + (open ? " · " + esc(q.category) : "") + "</span>" +
       '<span class="card-tier">' + TIER_NAMES[q.tier] + "</span></div>" +
       (open ? '<div class="card-text">' + esc(q.text) + "</div>" : '<div class="card-text blind">？</div>') +
       (extraBtn || "") + "</div>";
